@@ -4,6 +4,16 @@ neofetch
 source $ZDOTDIR/config.zsh
 source $ZDOTDIR/aliases.zsh
 
+# lazy load custom functions
+lazyload_fpath=$HOME/.zsh/autoload
+fpath=($lazyload_fpath $fpath)
+if [[ -d "$lazyload_fpath" ]]; then
+    for func in $lazyload_fpath/*; do
+        autoload -Uz ${func:t}
+    done
+fi
+unset lazyload_fpath
+
 autoload -Uz promptinit
 promptinit
 prompt suse

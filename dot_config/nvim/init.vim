@@ -10,9 +10,15 @@ if empty(glob('~/.config/nvim/autoload/plug.vim'))
 	silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs
 			\ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 	autocmd VimEnter * PlugInstall
+
+	" Create target directory for Vim-Plug to install into.
+	if !isdirectory('~/.config/nvim/plugins')
+    	call mkdir('~/.config/nvim/plugins', 'p')
+	endif
+
 endif
 
-" Vim-plug configuration settings
+" Intiate Vim-Plug
 call plug#begin('~/.config/nvim/plugins')
 
 " Allow for vim to be used as a text editor
