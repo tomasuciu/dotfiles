@@ -40,11 +40,17 @@ apt-get -y install --no-install-recommends ninja-build gettext cmake unzip curl 
 
 update-ca-certificates
 
-if [ ! -d "neovim" ]; then
-    git clone https://github.com/neovim/neovim
+nvim_repo_path="${PWD}/neovim"
+if [ ! -d $nvim_repo_path ]; then
+    git -c advice.detachedHead=false clone \
+	    --separate-git-dir=$(mktemp -u) \
+	    --depth=1 \
+	    --branch stable \
+	    --single-branch https://github.com/neovim/neovim $nvim_repo_path
+
+    rm ${nvim_repo_path}/.git
 fi
 
-cd neovim && make CMAKE_BUILD_TYPE=RelWithDebInfo
-git checkout stable
-
+cd $nvim_repo_path && make CMAKE_BUILD_TYPE=RelWithDebInfo
 cd build && cpack -G DEB && sudo dpkg -i nvim-linux64.deb
+cd $PWD && rm -rf $nvim_repo_path
